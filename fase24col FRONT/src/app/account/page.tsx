@@ -30,6 +30,25 @@ export default function AccountPage() {
   const [editLoading, setEditLoading] = useState(false)
   const [editSuccess, setEditSuccess] = useState(false)
 
+  function validatePassword(password: string): string | null {
+    if (password.length < 8) {
+      return "La contraseña debe tener al menos 8 caracteres."
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "La contraseña debe contener al menos una letra mayúscula."
+    }
+    if (!/[a-z]/.test(password)) {
+      return "La contraseña debe contener al menos una letra minúscula."
+    }
+    if (!/[0-9]/.test(password)) {
+      return "La contraseña debe contener al menos un número."
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      return "La contraseña debe contener al menos un símbolo."
+    }
+    return null
+  }
+
   useEffect(() => {
     if (!user) return
     setLoading(true)
@@ -47,6 +66,11 @@ export default function AccountPage() {
     e.preventDefault()
     if (!user) {
       setEditError("Usuario no autenticado")
+      return
+    }
+    const passwordError = validatePassword(editPassword)
+    if (passwordError) {
+      setEditError(passwordError)
       return
     }
     setEditLoading(true)
