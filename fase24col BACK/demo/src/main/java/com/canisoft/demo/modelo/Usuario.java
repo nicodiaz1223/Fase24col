@@ -22,6 +22,8 @@ public class Usuario {
 
     private String rol; // CLIENTE o ADMIN
 
+    private String direccion; // Opcional, puede ser null
+
     // Getters y setters
 
     public Long getId() {
@@ -63,5 +65,13 @@ public class Usuario {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }

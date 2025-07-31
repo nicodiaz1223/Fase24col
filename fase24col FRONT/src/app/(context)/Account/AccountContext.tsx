@@ -22,6 +22,7 @@ interface AccountContextType {
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 const AccountContext = createContext<AccountContextType | undefined>(undefined)
@@ -75,6 +76,7 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated: !!user,
         login,
         logout,
+        setUser
       }}
     >
       {children}

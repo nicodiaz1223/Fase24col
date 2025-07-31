@@ -27,7 +27,7 @@ export default function RegisterPage() {
           nombre: name,
           correo: email,
           contrasena: password,
-          direccion,
+          direccion: direccion,
           rol: "CLIENTE",
         }),
       })
