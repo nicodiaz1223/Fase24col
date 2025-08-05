@@ -14,8 +14,32 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
+  function validatePassword(password: string): string | null {
+    if (password.length < 8) {
+      return "La contraseña debe tener al menos 8 caracteres."
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "La contraseña debe contener al menos una letra mayúscula."
+    }
+    if (!/[a-z]/.test(password)) {
+      return "La contraseña debe contener al menos una letra minúscula."
+    }
+    if (!/[0-9]/.test(password)) {
+      return "La contraseña debe contener al menos un número."
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      return "La contraseña debe contener al menos un símbolo."
+    }
+    return null
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const passwordError = validatePassword(password)
+    if (passwordError) {
+      setError(passwordError)
+      return
+    }
     setLoading(true)
     setError("")
     setSuccess(false)
@@ -27,7 +51,7 @@ export default function RegisterPage() {
           nombre: name,
           correo: email,
           contrasena: password,
-          direccion,
+          direccion: direccion,
           rol: "CLIENTE",
         }),
       })
