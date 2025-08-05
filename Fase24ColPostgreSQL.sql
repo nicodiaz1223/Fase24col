@@ -5,7 +5,7 @@
 -- Dumped from database version 17.5
 -- Dumped by pg_dump version 17.5
 
--- Started on 2025-07-29 14:36:26
+-- Started on 2025-08-04 19:07:09
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -233,7 +233,8 @@ CREATE TABLE public.usuario (
     nombre character varying(255),
     correo character varying(255),
     contrasena character varying(255),
-    rol character varying(255)
+    rol character varying(255),
+    direccion character varying(255)
 );
 
 
@@ -367,12 +368,13 @@ COPY public.producto (id, nombre, descripcion, precio, stock, categoria, imagen_
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.usuario (id, nombre, correo, contrasena, rol) FROM stdin;
-1	Juan Pérez	juan.perez@example.com	password123	cliente
-2	María García	maria.garcia@example.com	securepass	cliente
-3	Admin Principal	admin@tienda.com	admin1234	admin
-4	Carlos López	carlos.lopez@example.com	mypassword	cliente
-5	Ana Martínez	ana.martinez@example.com	anapass567	cliente
+COPY public.usuario (id, nombre, correo, contrasena, rol, direccion) FROM stdin;
+1	Juan Pérez	juan.perez@example.com	password123	cliente	\N
+2	María García	maria.garcia@example.com	securepass	cliente	\N
+3	Admin Principal	admin@tienda.com	admin1234	admin	\N
+4	Carlos López	carlos.lopez@example.com	mypassword	cliente	\N
+5	Ana Martínez	ana.martinez@example.com	anapass567	cliente	\N
+12	Juan Carrillo	Juan.Carrillo@bd.edu.co	JuanCarrillo0*	CLIENTE	Villavicencio
 \.
 
 
@@ -427,7 +429,7 @@ SELECT pg_catalog.setval('public.producto_id_seq', 1, false);
 -- Name: usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.usuario_id_seq', 5, true);
+SELECT pg_catalog.setval('public.usuario_id_seq', 12, true);
 
 
 --
@@ -547,7 +549,7 @@ ALTER TABLE ONLY public.pedido
     ADD CONSTRAINT pedido_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuario(id);
 
 
--- Completed on 2025-07-29 14:36:26
+-- Completed on 2025-08-04 19:07:10
 
 --
 -- PostgreSQL database dump complete
