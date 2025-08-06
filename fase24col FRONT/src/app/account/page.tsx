@@ -30,6 +30,9 @@ export default function AccountPage() {
   const [editLoading, setEditLoading] = useState(false)
   const [editSuccess, setEditSuccess] = useState(false)
 
+  // Verificar si el usuario es administrador
+  const isAdmin = user?.rol === "ADMINISTRADOR"
+
   function validatePassword(password: string): string | null {
     if (password.length < 8) {
       return "La contraseña debe tener al menos 8 caracteres."
@@ -125,13 +128,36 @@ export default function AccountPage() {
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Mi Cuenta
           </h1>
-          <button
-            onClick={() => logout()}
-            className="bg-red-600 text-white rounded-full px-5 py-2 hover:bg-red-700 transition"
-          >
-            Cerrar sesión
-          </button>
+          <div className="flex gap-3">
+            {/* Botón de administrador - Solo visible para admins */}
+            {isAdmin && (
+              <Link
+                href="/admin/products"
+                className="bg-blue-600 text-white rounded-full px-5 py-2 hover:bg-blue-700 transition font-medium"
+              >
+                🛠️ Editar Productos
+              </Link>
+            )}
+            <button
+              onClick={() => logout()}
+              className="bg-red-600 text-white rounded-full px-5 py-2 hover:bg-red-700 transition"
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </div>
+
+        {/* Badge de administrador */}
+        {isAdmin && (
+          <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+              <span className="text-blue-600 font-semibold">👑 ADMINISTRADOR</span>
+              <span className="text-blue-700 text-sm">
+                Tienes acceso a funciones administrativas
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Información básica */}
         <section className="mb-12 bg-slate-50 rounded-xl p-6 shadow">
@@ -151,7 +177,14 @@ export default function AccountPage() {
                   <span className="font-medium">Dirección:</span> {user?.direccion}
                 </div>
                 <div>
-                  <span className="font-medium">Rol:</span> {user?.rol}
+                  <span className="font-medium">Rol:</span> 
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
+                    isAdmin 
+                      ? 'bg-blue-100 text-blue-800' 
+                      : 'bg-green-100 text-green-800'
+                  }`}>
+                    {user?.rol}
+                  </span>
                 </div>
               </div>
               <button
