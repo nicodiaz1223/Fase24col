@@ -1,9 +1,61 @@
+version: '3.8'
+
 services:
-  spring-app:
-    build: .
-    container_name: spring-boot-app
-    ports:
-      - "8080:8080"
-    environment:
-      - JAVA_OPTS=
+  postgres:
+    image: postgres:15-alpine
+    container_name: Fase24Col-postgres
     restart: unless-stopped
+    environment:
+      POSTGRES_DB: Fase24Col
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresql
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d/
+    networks:
+      - pedidos-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Fase24Col"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: Fase24Col-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      # Spring Config
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/Fase24Col
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgresql
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${DDL_AUTO:-update}
+      SPRING_JPA_SHOW_SQL: ${SHOW_SQL:-false}
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: ${FORMAT_SQL:-false}
+
+      # App Config
+      LOGGING_LEVEL_ROOT: ${LOG_LEVEL:-INFO}
+      SERVER_PORT: 8080
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pedidos-network
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  pedidos-network:
+    driver: bridge

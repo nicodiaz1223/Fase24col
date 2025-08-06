@@ -58,6 +58,14 @@ export default function LoginPage() {
           </button>
         </form>
         <p className="mt-4 text-sm text-slate-700">
+          <a
+            href="/register"
+            className="text-slate-900 underline hover:text-slate-700"
+          >
+            ¿Olvidaste tu contraseña?
+          </a>
+        </p>
+        <p className="mt-4 text-sm text-slate-700">
           ¿Todavía no tienes cuenta?{" "}
           <a
             href="/register"
